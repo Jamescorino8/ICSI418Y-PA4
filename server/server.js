@@ -487,7 +487,7 @@ app.post("/api/projects/:projectId/stories", async (req, res) => {
       });
     }
 
-    // build the document explicitly; new stories always start as To Do
+    // new stories always start as To Do
     await userStories.insertOne({
       project_id: project._id,
       title: title.trim(),
@@ -556,8 +556,7 @@ app.put("/api/projects/:projectId/stories/:storyId", async (req, res) => {
       });
     }
 
-    // both ids in the filter so a story can only be edited through its own project;
-    // project_id is never in $set, so it cannot change
+    // both ids in the filter so a story can only be edited through its own project
     const result = await userStories.updateOne(
       {
         _id: new ObjectId(storyId),
@@ -574,7 +573,6 @@ app.put("/api/projects/:projectId/stories/:storyId", async (req, res) => {
       },
     );
 
-    // matchedCount, not modifiedCount: saving unchanged values still succeeds
     if (result.matchedCount === 0) {
       return res.status(404).json({
         message: "User story does not exist in this project",
