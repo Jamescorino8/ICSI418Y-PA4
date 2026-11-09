@@ -5,11 +5,14 @@ import Login from './components/Login.jsx'
 import CreateProject from './components/CreateProject.jsx'
 import ProjectList from './components/ProjectList.jsx'
 import ProjectMembers from './components/ProjectMembers.jsx'
+import ProjectBacklog from './components/ProjectBacklog.jsx'
 
 function App() {
   // users and projects are shared by the project components, so they are fetched here
   const [users, setUsers] = useState([])
   const [projects, setProjects] = useState([])
+  // goes up whenever a member is added or removed, so the backlog reloads its assignee list
+  const [memberChanges, setMemberChanges] = useState(0)
 
   async function loadUsers() {
     try {
@@ -44,7 +47,12 @@ function App() {
       <Login/>
       <CreateProject users={users} onCreate={loadProjects}/>
       <ProjectList projects={projects} users={users}/>
-      <ProjectMembers projects={projects} users={users}/>
+      <ProjectMembers
+        projects={projects}
+        users={users}
+        onMembersChange={() => setMemberChanges((count) => count + 1)}
+      />
+      <ProjectBacklog projects={projects} users={users} memberChanges={memberChanges}/>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function ProjectMembers({ projects, users }) {
+function ProjectMembers({ projects, users, onMembersChange }) {
     const [projectId, setProjectId] = useState("");
     const [members, setMembers] = useState([]);
     const [userId, setUserId] = useState("");
@@ -58,6 +58,7 @@ function ProjectMembers({ projects, users }) {
             setMessage(data.message);
             if (response.ok) {
                 loadMembers(projectId);
+                onMembersChange();
             }
         } catch (error) {
             setMessage("Could not connect to the server");
@@ -76,6 +77,7 @@ function ProjectMembers({ projects, users }) {
             setMessage(data.message);
             if (response.ok) {
                 loadMembers(projectId);
+                onMembersChange();
             }
         } catch (error) {
             setMessage("Could not connect to the server");
